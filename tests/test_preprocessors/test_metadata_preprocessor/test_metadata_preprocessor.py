@@ -33,9 +33,7 @@ def test_preprocess_jmd_cell(jmd_cell, nb_defaults_path):
     HtmlNbMetadataPreprocessor.nb_defaults_path = nb_defaults_path
     preprocessor = HtmlNbMetadataPreprocessor()
 
-    resources = {}
-    resources["pj_metadata"] = preprocessor.defaults
-
+    resources = {"pj_metadata": preprocessor.defaults}
     # must raise warning because cell has specified metadata both in code and nb metadata
     # cell metadata have priority tho and nb metadata for the cell are ignored
     with pytest.warns(UserWarning):
@@ -52,9 +50,7 @@ def test_preprocess_jmd_cell(jmd_cell, nb_defaults_path):
 def test_preprocess_code_cell(code_cell, nb_defaults_path):
     HtmlNbMetadataPreprocessor.nb_defaults_path = nb_defaults_path
     preprocessor = HtmlNbMetadataPreprocessor()
-    resources = {}
-    resources["pj_metadata"] = preprocessor.defaults
-
+    resources = {"pj_metadata": preprocessor.defaults}
     cell, resources = preprocessor.preprocess_cell(code_cell, resources, index=2)
 
     assert cell.transient is None

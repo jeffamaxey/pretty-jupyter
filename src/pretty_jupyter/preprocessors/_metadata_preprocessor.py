@@ -61,9 +61,9 @@ class NbMetadataPreprocessor(Preprocessor):
         self.defaults = nb_defaults
 
     def preprocess(self, nb, resources):
-        # deprecation warnings to help users fix their error
-        deprecated_attrs = [a for a in _DEPRECATED_ATTRIBUTES if a in nb.metadata]
-        if len(deprecated_attrs) > 0:
+        if deprecated_attrs := [
+            a for a in _DEPRECATED_ATTRIBUTES if a in nb.metadata
+        ]:
             warnings.warn(DEPRECATED_METADATA_MSG_FORMAT.format(attributes=", ".join(deprecated_attrs), version=_DEPRECATED_ATTRIBUTES_VERSION), category=DeprecationWarning)
 
         # temporarily store nb metadata to resources to be accessible in cell
@@ -139,14 +139,15 @@ class NbMetadataPreprocessor(Preprocessor):
         source_lines = cell.source.splitlines()
         is_empty = len(source_lines) == 0
         # if cell is jinja markdown
-        if not is_empty and cell.cell_type == "code" and is_jinja_cell(cell.source):
-            # read src_cell_metadata from the second line (after jmd), if the file has two lines
-            if len(source_lines) >= 2:
-                src_cell_metadata = read_markdown_metadata_token(source_lines[1])
-        elif not is_empty and cell.cell_type == "code":
-            src_cell_metadata = read_code_metadata_token(source_lines[0])
-        elif not is_empty and cell.cell_type == "markdown":
-            src_cell_metadata = read_markdown_metadata_token(source_lines[0])
+        if not is_empty:
+            if cell.cell_type == "code" and is_jinja_cell(cell.source):
+                # read src_cell_metadata from the second line (after jmd), if the file has two lines
+                if len(source_lines) >= 2:
+                    src_cell_metadata = read_markdown_metadata_token(source_lines[1])
+            elif cell.cell_type == "code":
+                src_cell_metadata = read_code_metadata_token(source_lines[0])
+            elif cell.cell_type == "markdown":
+                src_cell_metadata = read_markdown_metadata_token(source_lines[0])
 
         # if nothing was read, just assign blank
         if src_cell_metadata is None:
@@ -257,5 +258,4 @@ def get_code_folding_value(cell, resources):
     code_folding = nb_metadata["code_folding"]
     if "input_fold" in cell_metadata:
         code_folding = cell_metadata["input_fold"]
-    value = f"fold-{code_folding}"
-    return value
+    return f"fold-{code_folding}"

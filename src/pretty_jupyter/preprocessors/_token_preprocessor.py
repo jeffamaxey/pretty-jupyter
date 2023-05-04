@@ -53,7 +53,7 @@ class TokenCleaningPreprocessor(Preprocessor):
     def preprocess_cell(self, cell, resources, index):
         if cell.cell_type == "code":
             for i, output in enumerate(cell.outputs):
-                if not "data" in output:
+                if "data" not in output:
                     continue
 
                 output_data = output["data"]

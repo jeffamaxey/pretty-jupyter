@@ -80,8 +80,18 @@ def test_toc_number_sections(templates_path, input_path, out_path, page_url, dri
     assert third_chapter.get_attribute("innerHTML") == "Level 1", "The third Level 1 has been marked as unnumbered."
 
     # test that Level 3s are numbered and they follow the proper naming convention
-    assert main_content.find_element(By.XPATH, f"//*[@id = 'Level-2-O_O-1']/h2").get_attribute("innerHTML") == "1.1. Level 2"
-    assert main_content.find_element(By.XPATH, f"//*[@id = 'Level-2-O_O-2']/h2").get_attribute("innerHTML") == "2.1. Level 2"
+    assert (
+        main_content.find_element(
+            By.XPATH, "//*[@id = 'Level-2-O_O-1']/h2"
+        ).get_attribute("innerHTML")
+        == "1.1. Level 2"
+    )
+    assert (
+        main_content.find_element(
+            By.XPATH, "//*[@id = 'Level-2-O_O-2']/h2"
+        ).get_attribute("innerHTML")
+        == "2.1. Level 2"
+    )
 
 
 

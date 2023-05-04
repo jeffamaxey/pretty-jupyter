@@ -34,29 +34,24 @@ def convert_markdown_tokens_to_html(input_str: str) -> str:
             line = line.replace(markdown, html)
         all_lines.append(line)
 
-    # output is still in md, but token
-    output = "\n".join(all_lines)
-    return output
+    return "\n".join(all_lines)
 
 def read_code_metadata_token(input_line: str) -> dict:
-    # parse token
-    result = re.search(CODE_METADATA_TOKEN_REGEX, input_line)
-
-    if not result:
+    if result := re.search(CODE_METADATA_TOKEN_REGEX, input_line):
+        return (
+            None
+            if len(result.groups()) == 0
+            else yaml.safe_load(result.groups()[0])
+        )
+    else:
         return None
-
-    if len(result.groups()) == 0:
-        return None
-
-    return yaml.safe_load(result.groups()[0])
 
 def read_markdown_metadata_token(input_line: str):
-    result = re.search(MARKDOWN_METADATA_TOKEN_REGEX, input_line)
-
-    if not result:
+    if result := re.search(MARKDOWN_METADATA_TOKEN_REGEX, input_line):
+        return (
+            None
+            if len(result.groups()) == 0
+            else yaml.safe_load(result.groups()[0])
+        )
+    else:
         return None
-
-    if len(result.groups()) == 0:
-        return None
-
-    return yaml.safe_load(result.groups()[0])

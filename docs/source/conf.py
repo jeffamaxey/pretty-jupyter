@@ -10,7 +10,7 @@ from datetime import date
 
 project = 'Pretty Jupyter'
 year = date.today().year
-copyright = "2022-%s, Jan Palasek" % year
+copyright = f"2022-{year}, Jan Palasek"
 author = 'Jan Palasek'
 version = '2.0.0'
 release = version

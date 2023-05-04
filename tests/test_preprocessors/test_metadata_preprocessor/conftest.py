@@ -21,10 +21,7 @@ def raw_cell(fixture_dir):
 @pytest.fixture
 def jmd_cell(fixture_dir):
     cell = MagicMock(name="jmd_cell")
-    cell.metadata = {}
-    cell.metadata["pj_metadata"] = {
-        "input_fold": "disable"
-    }
+    cell.metadata = {"pj_metadata": {"input_fold": "disable"}}
     with open(Path(fixture_dir) / "jmd_cell.md") as file:
         type(cell).source = PropertyMock(return_value=file.read())
     type(cell).cell_type = PropertyMock(return_value="code")
@@ -52,16 +49,12 @@ def code_cell(fixture_dir):
     output = MagicMock(name="output")
     output.metadata = {}
 
-    # outputs
-    outputs = []
-
     output = MagicMock(name="stream_stdout")
     output.metadata = {}
     type(output).output_type = PropertyMock(return_value="stream")
     type(output).name = PropertyMock(return_value="stdout")
     type(output).data = {}
-    outputs.append(output)
-
+    outputs = [output]
     output = MagicMock(name="stream_stderr")
     output.metadata = {}
     type(output).output_type = PropertyMock(return_value="stream")

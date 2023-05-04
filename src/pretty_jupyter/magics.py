@@ -32,9 +32,14 @@ class JinjaMagics(Magics):
 
         # render the cell with jinja (substitutes variables,...)
         tmp = self.env.from_string(cell)
-        rend = tmp.render(dict((k,v) for (k,v) in self.shell.user_ns.items() 
-                                        if not k.startswith('_') and k not in self.shell.user_ns_hidden))
-        
+        rend = tmp.render(
+            {
+                k: v
+                for (k, v) in self.shell.user_ns.items()
+                if not k.startswith('_') and k not in self.shell.user_ns_hidden
+            }
+        )
+
         # convert tokens to html
         if display_fn_name == "markdown":
             rend = convert_markdown_tokens_to_html(rend)
@@ -60,7 +65,7 @@ def is_jinja_cell(input_str: str) -> bool:
     """
     lines = input_str.splitlines()
 
-    if len(lines) == 0:
+    if not lines:
         return False
 
     first_line = lines[0]
